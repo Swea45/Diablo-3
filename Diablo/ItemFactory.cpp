@@ -64,7 +64,6 @@ std::shared_ptr<Items> ItemFactory::CreateItem(const ItemType aItemType) const
 
 std::shared_ptr<Items> ItemFactory::CreateItemWithRandomStats(const ItemType aItemType) const
 {
-	
 	std::shared_ptr<Items> item = std::make_shared<Items>(myItemTypes[static_cast<int>(aItemType)]);
 	item->SetLevel(RandomLevel());
 	std::vector<PrimeStats> randomPrimeStat;

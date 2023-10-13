@@ -17,9 +17,10 @@ void AddDoor(int aConnectingRoomOne, int aConnectingRoomTwo, std::vector<std::sh
 	aListOfDoors.push_back(ptr);
 }
 
-void AddRoom(int aRoomNumber, std::string aRoomType, std::vector<std::shared_ptr<Room>>& aListOfRooms, std::vector<std::shared_ptr<Door>>& aListOfDoors)
+void AddRoom(int aRoomNumber, std::string aRoomType, std::vector<std::shared_ptr<Room>>& aListOfRooms, 
+	std::vector<std::shared_ptr<Door>>& aListOfDoors, EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory)
 {
-	std::shared_ptr<Room> room = std::make_shared<Room>(aRoomNumber, aRoomType);
+	std::shared_ptr<Room> room = std::make_shared<Room>(aRoomNumber, aRoomType, aEnemyFactory, aItemFactory);
 	aListOfRooms.push_back(room);
 	if (aRoomType == "Start")
 	{
@@ -28,6 +29,26 @@ void AddRoom(int aRoomNumber, std::string aRoomType, std::vector<std::shared_ptr
 	else if (aRoomType == "Normal")
 	{
 		AddDoor(aRoomNumber, aRoomNumber++, aListOfDoors);
+	}
+}
+
+void CreateDungeon(std::vector<std::shared_ptr<Room>>& aListOfRooms,std::vector<std::shared_ptr<Door>>& aListOfDoors, 
+	EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory)
+{
+	for (int i = 0; i < static_cast<int>(RoomBase::NumberOfRooms); i++)
+	{
+		if (aListOfRooms.empty())
+		{
+			AddRoom(static_cast<int>(aListOfRooms.size()), "Start", aListOfRooms, aListOfDoors, aEnemyFactory, aItemFactory);
+		}
+		else if (i == static_cast<int>(RoomBase::NumberOfRooms) - 1)
+		{
+			AddRoom(static_cast<int>(aListOfRooms.size()), "Boss", aListOfRooms, aListOfDoors, aEnemyFactory, aItemFactory);
+		}
+		else
+		{
+			AddRoom(static_cast<int>(aListOfRooms.size()), "Normal", aListOfRooms, aListOfDoors, aEnemyFactory, aItemFactory);
+		}
 	}
 }
 
@@ -45,23 +66,17 @@ int main()
 	itemFactory.Init();
 
 
-	AddRoom(static_cast<int>(rooms.size()), "Start", rooms, doorsSmart);
-	AddRoom(static_cast<int>(rooms.size()), "Normal", rooms, doorsSmart);
-	AddRoom(static_cast<int>(rooms.size()), "Normal", rooms, doorsSmart);
-	AddRoom(static_cast<int>(rooms.size()), "Boss", rooms, doorsSmart);
+
+	CreateDungeon(rooms, doorsSmart, enemyFactory, itemFactory);
 
 	player.ShowPlayerStats();
 	while (player.GetIsAlive() == true && rooms[player.GetCurrentRoom()]->LastBossDefeted() == false)
 	{
 		player.SetRoomIndex(rooms[player.GetCurrentRoom()]);
 		ui::ClearGame();
-		rooms[player.GetCurrentRoom()]->Init(enemyFactory, itemFactory);
 		rooms[player.GetCurrentRoom()]->EnterRoom(player, doorsSmart, rooms, itemFactory);
 	}
 	
-
-
-
 	if (player.GetPlayerHp() <= 0)
 	{
 		ui::PrintInMenu("Hell is taking over after your defet!");
@@ -70,6 +85,5 @@ int main()
 	{
 		ui::PrintInMenu("You have defeted Diablo!");
 	}
-
 }
 

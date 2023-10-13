@@ -31,7 +31,7 @@ enum class RoomBase
 	MinNumberOfItemsDropt	= 0,
 
 	ChansOfGettingAEvent	= 2, 
-	ChansOfGettingAChest	= 0,
+	ChansOfGettingAChest	= 2,
 
 	MenuExplore				= 0,
 	MenuLoot				= 1,
@@ -41,7 +41,7 @@ enum class RoomBase
 	ItemsExploreList,
 	ItemsLootList,
 
-	numberOfRooms			= 4,
+	NumberOfRooms			= 4,
 
 };
 
@@ -65,8 +65,8 @@ enum class EventBase
 
 enum class ChestBase
 {
-	MinLockDifficulty		= 1,
-	MaxLockDifficulty		= 2,
+	MinLockDifficulty		= 15,
+	MaxLockDifficulty		= 40,
 	
 	MinAmountOfItems		= 1,
 	MaxAmountOfItems		= 3,

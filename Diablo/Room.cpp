@@ -12,7 +12,7 @@
 #include "ItemFactory.h"
 
 
-Room::Room(int aRoomNr, std::string aRoomType)
+Room::Room(int aRoomNr, std::string aRoomType, EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory)
 {
 	myEnemyList;
 	myConnectingDoors;
@@ -27,12 +27,7 @@ Room::Room(int aRoomNr, std::string aRoomType)
 	myLastBossRoom = false;
 	myLastBossDefeted = false;
 	myEvent = nullptr;
-	
-	
-}
 
-void Room::Init(EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory)
-{
 	if (myRoomType == "Random")
 	{
 		myRoomType = "Normal";
@@ -77,7 +72,9 @@ void Room::Init(EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory)
 			myChest = std::make_shared<Chest>();
 		}
 	}
+	
 }
+
 
 std::string Room::GetRoomName()
 {
@@ -109,7 +106,7 @@ void Room::CheckConnectingDoors(std::vector<std::shared_ptr<Door>> aListOfDoors)
 bool Room::LivingEnemies()
 {
 	bool livingEnemie = false;
-	for (int i = 0; i < myEnemyList.size(); i++)
+	for (int i = 0; i < static_cast<int>(myEnemyList.size()); i++)
 	{
 		if (myEnemyList[i]->GetIsAlive() == true)
 		{
@@ -304,7 +301,7 @@ void Room::Loot(Player& aPlayer)
 								ui::PrintInMenu("The chest stands firm, you arent strong enuth");
 								Sleep();
 							}
-							//break;
+							break;
 						}
 						case 1:
 						{

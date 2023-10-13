@@ -11,13 +11,12 @@ class Player;
 class Enemy;
 class Door;
 class Items;
-//class EnemyFactory;
 class ItemFactory;
 
 class Room
 {
 public:
-	Room(int aRoomNr, std::string aRoomType);
+	Room(int aRoomNr, std::string aRoomType, EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory);
 	void Init(EnemyFactory& aEnemyFactory, ItemFactory& aItemFactory);
 	void EnterRoom(Player& aPlayer, std::vector<std::shared_ptr<Door>> aListOfDoors, 
 		std::vector<std::shared_ptr<Room>>& aRoomList, ItemFactory& aItemFactory);
